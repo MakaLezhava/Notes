@@ -1,0 +1,20 @@
+form {
+	width: 50%;
+	margin: 0 auto;
+	padding: 5px;
+}
+
+textarea {
+	width: 100%;
+	box-sizing: border-box;
+}	
+
+table { margin: 0 auto }
+
+button[name=save] {
+	float: right;
+}
+
+.table-container {
+	clear: both
+}

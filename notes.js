@@ -1,6 +1,45 @@
 (function(){
 	var button = document.getElementsByName("save")[0];
 	var delete_button = document.getElementById('delete');
+
+function getCheckedBoxes(chkboxName) {
+  var checkboxes = document.getElementsByName(chkboxName);
+  var checkboxesChecked = [];
+  
+  for (var i=0; i<checkboxes.length; i++) {
+     
+     if (checkboxes[i].checked) {
+        checkboxesChecked.push({index: i,value:checkboxes[i].value});
+     }
+  }
+  
+  return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+}
+
+delete_button.onclick = function(event){
+	event.preventDefault();
+	var checkboxes = getCheckedBoxes('checkbox');
+	var checkboxes_array = []
+	checkboxes.forEach(function(element){
+		checkboxes_array.push(element.value);
+	})
+	console.log(checkboxes_array);
+	var client = (new XMLHttpRequest) || (new ActiveXObject);
+	client.open("POST", "delete.php", true);
+	client.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	client.onreadystatechange = function() {
+		var postResp = JSON.parse(client.response);
+
+		if(client.status === 201) {
+      document.getElementById("msg").innerHTML = postResp.status.message;
+    }else if(client.status === 400){
+    	document.getElementById("msg").innerHTML = postResp.status.message;
+    }
+	}
+
+	client.send("delete=" + checkboxes_array);
+}
+
 button.onclick = function(event) {
     event.preventDefault();
     
@@ -63,7 +102,7 @@ function drawTableBody(jsonArray) {
         tr.appendChild(dateTd);
         
         var checkTd = document.createElement("td");
-        checkTd.innerHTML = "<input type='checkbox' value='" + elem.id + "'>";
+        checkTd.innerHTML = "<input type='checkbox' name='checkbox' value='" + elem.id + "'>";
         tr.appendChild(checkTd);
         
         tbody.appendChild(tr);
@@ -71,6 +110,5 @@ function drawTableBody(jsonArray) {
     
     return tbody;
 }
-
 
 })()
