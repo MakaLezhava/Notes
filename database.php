@@ -10,10 +10,7 @@ function db_connect() {
    	 	printf("Connect failed: %s\n", mysqli_connect_error());
     	exit();
 	}	
-
-	// mysqli_close($connection);
-
+	
 	return $connection;
 }
-?>
 
